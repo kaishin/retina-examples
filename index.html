@@ -1,0 +1,203 @@
+---
+layout: default
+---
+
+<div class="row">
+  <div class="eight columns">
+
+    <h1>Towards a Retina Web: Live Examples</h1>
+    <h2>HTML/CSS sizing</h2>
+    <h4 id="sizing-using-html">Using HTML</h4>
+        <pre><code>&lt;img src="pebbles@2x.png" width="200" height="300" /&gt;</code></pre>
+
+    <img src="images/pebbles@2x.png" width="200" height="300" />
+
+    <h4 id="sizing-using-javascript">Using Javascript</h4>
+        <pre><code>&lt;img src="pebbles@2x.png" /&gt;</code></pre>
+<pre><code>
+$(window).load(function() {
+  var images = $('img');
+  images.each(function(i) {
+    images.eq(i).width(images.eq(i).width() / 2);
+  });
+});
+</code></pre>
+        <img class="html-sizing-with-javascript" src="images/pebbles@2x.png" />
+
+        <h4 id="sizing-using-css">Using CSS</h4>
+<pre><code>&lt;div class="css-sizing" src="pebbles@2x.png"&gt;&lt;/div&gt;</code></pre>
+<pre><code>div.css-sizing {
+  background-image: url(pebbles@2x.png);
+  background-size: 200px 300px;
+  height: 300px;
+  width:200px;
+}
+</code></pre>
+
+<div class="css-sizing"></div>
+
+
+<p>Using <em>contain</em>:</p>
+<pre><code>&lt;div class="css-sizing-contain" src="pebbles@2x.png"&gt;&lt;/div&gt;</code></pre>
+<pre><code>div.css-sizing {
+  background-image: url(pebbles@2x.png);
+  background-size: contain;
+  height: 300px;
+  width:200px;
+}
+</code></pre>
+<div class="css-sizing-contain"></div>
+
+
+<p>Using pseudo-elements:</p>
+<pre><code>&lt;div class="pseudo-css-sizing"&gt;&lt;/div&gt;</code></pre>
+<pre>
+ <code>
+div.pseudo-css-sizing:before {
+  background-image: url(pebbles@2x.png);
+  background-size: 200px 300px;
+  content:'';
+  display: block;
+  height: 300px;
+  width: 200px;
+}
+</code>
+</pre>
+<div class="pseudo-css-sizing"></div>
+
+<h2>Querying pixel density</h2>
+<h4 id="css-media-queries">Using CSS media queries</h4>
+
+<pre><code>&lt;div class="icon"&gt;&lt;/div&gt;</code></pre>
+<pre><code>div.icon {
+  background-image: url(pebbles.png);
+  background-size: 200px 300px;
+  height: 300px;
+  width:200px;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), 
+only screen and (-moz-min-device-pixel-ratio: 1.5), 
+only screen and (-o-min-device-pixel-ratio: 3/2), 
+only screen and (min-device-pixel-ratio: 1.5) {
+  div.icon {
+    background-image: url(pebbles@2x.png);
+  }
+}
+</code></pre>
+<div class="icon"></div>
+
+<h4 id="querying-javascript">Using Javascript</h4>
+
+<pre><code>&lt;img class="querying-javascript" src="pebbles.png" /&gt</code></pre>
+<pre><code>
+$(document).ready(function(){
+  if (window.devicePixelRatio > 1) {
+    var lowresImages = $('img.querying-javascript');
+
+    lowresImages.each(function(i) {
+      var lowres = $(this).attr('src');
+      var highres = lowres.replace(".", "@2x.");
+      $(this).attr('src', highres);
+    });
+  }
+});
+</code></pre>
+<img src="images/pebbles.png" class="querying-javascript" />
+
+<h2>Scalable vector graphics</h2>
+<h4 id="svg-using-html">Using HTML</h4>
+<pre><code>&lt;img src="pebbles.svg" width="100" height="100" /&gt;
+</code></pre>
+<img src="images/leaf.svg" width="100" height="100" />
+
+<h4 id="svg-using-css">Using CSS</h4>
+As a background image:
+
+<pre><code>&lt;div class="svg-background"&gt;&lt;/div&gt;</code></pre>
+<pre><code>
+div.svg-background {
+  background-image: url(leaf.svg);
+  background-size: 100px 100px;
+  height: 100px;
+  width: 100px;
+}
+</code></pre>
+
+<div class="svg-background"></div>
+
+As a content image:
+
+<pre><code>&lt;div class="svg-content"&gt;&lt;/div&gt;</code></pre>
+<pre><code>
+div.svg-content:before {
+  content: url(leaf.svg);
+}
+</code></pre>
+
+<div class="svg-content"></div>
+
+With PNG fallback:
+
+<pre><code>&lt;img src="leaf.svg" data-png-fallback="leaf.png" /&gt;
+</code></pre>
+
+
+<pre><code>$(document).ready(function(){
+  if(!Modernizr.svg) {
+    var images = $('img[data-png-fallback]');
+    images.each(function(i) {
+      $(this).attr('src', $(this).data('png-fallback'));
+    });
+  }
+});
+</code></pre>
+<img src="images/leaf.svg" data-png-fallback="leaf.png" />
+
+<h2>Icon Fonts</h2>
+Importing the font assets:
+<pre>
+ <code>
+@font-face {
+  font-family: 'Icon Font';
+  src: url("/font/icon-font.eot");
+  src: url("/font/icon-font.eot?#iefix") format('embedded-opentype'),
+       url("/font/icon-font.woff") format('woff'),
+       url("/font/icon-font.ttf") format('truetype'),
+       url("/font/icon-font.svg#icon-font") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+</code>
+</pre>
+
+<h4 id="icon-using-html">Using HTML</h3>
+
+<pre><code>&lt;span class="glyph"&gt;l&lt;/span&gt;</code></pre>
+
+<pre>
+ <code>
+span.glyph {
+  font-family: 'Icon Font';
+  font-size: 100px;
+}
+</code>
+</pre>
+<span class="glyph">l</span>
+
+<h4 id="icon-using-html">Using CSS <code>content</code>:</h3>
+<pre><code>&lt;span class="glyph-leaf"&gt;&lt;/span&gt;</code></pre>
+
+<pre>
+ <code>
+[class^="glyph-"]:before {
+  font-family: 'Icon Font';
+  font-size: 100px;
+}
+
+span.glyph-leaf:before {
+  content: 'l';
+}
+</code>
+</pre>
+<span class="glyph-leaf"></span>
